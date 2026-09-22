@@ -1,0 +1,100 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "low-username-index": {
+      ".read": true,
+      "$ukey": {
+        ".write": "auth != null && ((!data.exists() && newData.isString() && newData.val() === auth.token.email) || (data.exists() && data.val() === auth.token.email && !newData.exists()))",
+        ".validate": "newData.isString() && newData.val().length <= 254"
+      }
+    },
+    "low-roles": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && ( root.child('low-roles').child(auth.uid).val() === 'owner' || ( auth.uid === $uid && !data.exists() && ( newData.val() === 'member' || !root.child('low-roles').exists() ) ) )",
+        ".validate": "newData.val() === 'owner' || newData.val() === 'member'"
+      }
+    },
+    "low-users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('low-roles').child(auth.uid).val() === 'owner')",
+        ".write": "auth != null && ( root.child('low-roles').child(auth.uid).val() === 'owner' || auth.uid === $uid )",
+        "username": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length <= 254"
+        },
+        "phone": {
+          ".validate": "newData.isString() && newData.val().length <= 20"
+        },
+        "password": {
+          ".validate": false
+        },
+        "role": {
+          ".validate": "root.child('low-roles').child(auth.uid).val() === 'owner' || newData.val() === 'member' || newData.val() === data.val()"
+        }
+      }
+    },
+    "hr-employees": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-users').child(auth.uid).child('role').val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)"
+    },
+    "hr-private-employees": {
+      ".read": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-users').child(auth.uid).child('role').val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)",
+      ".write": "root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-users').child(auth.uid).child('role').val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true"
+    },
+    "low-manager-roles": {
+      ".read": "auth != null && root.child('low-roles').child(auth.uid).val() === 'owner'",
+      "$uid": {
+        ".write": "auth != null && root.child('low-roles').child(auth.uid).val() === 'owner'",
+        ".validate": "newData.hasChildren(['manager']) && newData.child('manager').val() === true"
+      }
+    },
+    "hr-attendance": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)"
+    },
+    "hr-checkin-session": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)"
+    },
+    "hr-checkins": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)",
+      "$uid": {
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true || (auth.uid === $uid && ((!data.exists() && newData.child('status').val() === 'pending') || (data.child('status').val() === 'rejected' && newData.child('status').val() === 'pending'))))",
+        ".validate": "newData.hasChildren(['sessionId','memberId','status']) && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'present' || newData.child('status').val() === 'rejected')"
+      }
+    },
+    "hr-checkin-history": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)"
+    },
+    "hr-meta": {
+      ".read": "auth != null",
+        ".write": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-users').child(auth.uid).child('role').val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)"
+    },
+    "hr-registrations": {
+      ".read": "auth != null && (root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)",
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true)",
+        ".write": "auth != null && ( root.child('low-roles').child(auth.uid).val() === 'owner' || root.child('low-manager-roles').child(auth.uid).child('manager').val() === true || (auth.uid === $uid && newData.exists()) )",
+        ".validate": "newData.hasChildren(['name','phone','registrationStatus'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 80"
+        },
+        "phone": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"
+        },
+        "scars": {
+          ".validate": "newData.val() === 0"
+        },
+        "registrationStatus": {
+          ".validate": "newData.val() === 'pending'"
+        }
+      }
+    }
+  }
+}

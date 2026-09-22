@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LOSE OR WIN — Hệ thống quản lý Gia Đình</title>
+<meta name="description" content="LOSE OR WIN — quản lý thành viên, điểm danh, cống hiến và bảng sẹo của Gia Đình LOW.">
+<meta name="theme-color" content="#0a0b0f">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<meta property="og:title" content="LOSE OR WIN">
+<meta property="og:description" content="Hệ thống quản lý Gia Đình LOW.">
+<meta property="og:image" content="assets/logo.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Oswald:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css?v=2.2.0">
+</head>
+<body>
+<div class="landing-overlay" id="landing-overlay">
+  <div class="landing-cursor-glow" id="landing-cursor-glow"></div>
+  <div class="landing-content">
+    <div class="landing-3d-scene" aria-hidden="true">
+      <div class="logo-cube">
+        <div class="cube-face cube-front"><img src="assets/logo.png" alt="LOW logo"></div>
+        <div class="cube-face cube-back"></div>
+        <div class="cube-face cube-left"></div>
+        <div class="cube-face cube-right"></div>
+        <div class="cube-face cube-top"></div>
+        <div class="cube-face cube-bottom"></div>
+      </div>
+    </div>
+    <div class="landing-logo-wrap"><img class="landing-logo" id="landing-logo" src="assets/logo.png" alt="LOSE OR WIN logo" decoding="async"></div>
+    <h1 class="landing-title">LOSE OR WIN</h1>
+    <div class="landing-rule"></div>
+    <p class="landing-copy"><b>LOSE OR WIN</b> là nơi kết nối anh em trong gia đình, quản lý thành viên, ghi nhận cống hiến và lưu giữ những dấu mốc của LOW bằng tinh thần kỷ luật, danh dự và đồng đội.</p>
+    <button class="landing-enter" type="button" onclick="enterPortal()">LOW</button>
+    <section class="landing-memories" aria-label="Kỷ niệm Đà Lạt">
+      <div class="landing-banner-layout">
+        <aside class="landing-side-rail" aria-hidden="true"></aside>
+        <div>
+          <div class="landing-memories-head">Dòng thời gian kỷ niệm</div>
+          <div class="memory-timeline">
+            <article class="memory-card"><div class="memory-dot"></div><img class="memory-photo" loading="lazy" decoding="async" src="assets/memory-2023.jpg" alt="Kỷ niệm Đà Lạt 2023"><div class="memory-year">2023</div><div class="memory-caption">Đà Lạt · Những ngày đầu</div></article>
+            <article class="memory-card"><div class="memory-dot"></div><img class="memory-photo" loading="lazy" decoding="async" src="assets/memory-2024.jpg" alt="Kỷ niệm Đà Lạt 2024"><div class="memory-year">2024</div><div class="memory-caption">Đà Lạt · Cùng nhau trở lại</div></article>
+            <article class="memory-card"><div class="memory-dot"></div><img class="memory-photo" loading="lazy" decoding="async" src="assets/memory-2025-group.jpg" alt="Kỷ niệm Đà Lạt 2025 - tập thể"><div class="memory-year">2025</div><div class="memory-caption">Đà Lạt · Một chặng đường</div></article>
+            <article class="memory-card"><div class="memory-dot"></div><img class="memory-photo" loading="lazy" decoding="async" src="assets/memory-2025.jpg" alt="Kỷ niệm Đà Lạt 2025 - anh em LOW"><div class="memory-year">2025</div><div class="memory-caption">Đà Lạt · Vẫn là anh em</div></article>
+          </div>
+        </div>
+        <aside class="landing-side-rail" aria-hidden="true"></aside>
+      </div>
+    </section>
+    <a class="landing-discord" href="https://discord.gg/WZr5Q8cQe" target="_blank" rel="noopener noreferrer" aria-label="Tham gia Discord LOW">
+      <img src="https://cdn.simpleicons.org/discord/ffffff" alt="Discord" decoding="async">
+      <span>Tham gia Discord</span>
+    </a>
+  </div>
+</div>
+<div class="auth-overlay hide" id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-title">LOSE OR WIN</div>
+    <div class="auth-sub">Đăng nhập để quản lý dữ liệu của Gia Đình</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Đăng Nhập</div>
+      <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Đăng Ký</div>
+    </div>
+
+    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+      <div class="field">
+        <label>Tên đăng nhập hoặc Email</label>
+        <input type="text" id="login-username" autocomplete="username" placeholder="Tên đăng nhập hoặc email" data-lpignore="true" data-form-type="other" required>
+      </div>
+      <div class="field">
+        <label>Mật khẩu</label>
+        <div class="password-wrap">
+          <input type="password" id="login-password" autocomplete="current-password" required>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit">Đăng Nhập</button>
+      <button type="button" class="auth-link" onclick="showForgotPassword()">Quên mật khẩu?</button>
+    </form>
+
+    <form class="auth-form" id="form-forgot" onsubmit="handleForgotPassword(event)">
+      <div class="field">
+        <label>Email đã đăng ký</label>
+        <input type="email" id="forgot-email" autocomplete="email" required>
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit">Gửi Email Khôi Phục</button>
+      <button type="button" class="auth-link" onclick="switchAuthTab('login')">Quay lại Đăng Nhập</button>
+    </form>
+
+    <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
+      <div class="field">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="reg-username" autocomplete="off" data-lpignore="true" data-form-type="other" maxlength="40" title="Không chứa @ . $ # [ ] /" required>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="reg-email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label>Mật khẩu</label>
+        <div class="password-wrap">
+          <input type="password" id="reg-password" autocomplete="new-password" required>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nhập lại mật khẩu</label>
+        <div class="password-wrap">
+          <input type="password" id="reg-password2" autocomplete="new-password" required>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password2', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit">Đăng Ký</button>
+      <div class="auth-register-notice" id="auth-register-notice" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<div class="top-strip"></div>
+<div class="shell" id="app" style="display:none">
+  <div class="empty-state">Đang tải dữ liệu…</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="lightbox-overlay" id="lightbox-overlay" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Ảnh phóng to">
+</div>
+
+<div class="vault-overlay" id="vault-overlay" onclick="if(event.target===this)closeVaultModal()"><div class="vault-modal"><div class="vault-modal-head"><div><h3>💰 Tổng Quỹ Gia Đình</h3><p>Danh sách đóng góp, xếp hạng và lịch sử ủng hộ chi tiết của toàn bộ thành viên.</p></div><button class="vault-close" onclick="closeVaultModal()">×</button></div><div class="vault-modal-body" id="vault-modal-body"></div></div></div>
+<div class="scar-alert-overlay" id="scar-alert-overlay" onclick="if(event.target===this)closeScarAlert()"><div class="scar-alert"><div class="scar-alert-icon">⚠️</div><h3 id="scar-alert-title">Cảnh Báo Vi Phạm</h3><p>Hệ thống đã ghi nhận vi phạm mới</p><div class="scar-alert-name" id="scar-alert-name"></div><div class="scar-alert-score" id="scar-alert-score"></div><div class="scar-progress"><i id="scar-alert-progress"></i></div><p id="scar-alert-message"></p><div class="modal-actions" style="justify-content:center"><button class="btn btn-primary" onclick="closeScarAlert()">Đã Hiểu</button></div></div></div>
+
+<div class="birthday-alert-overlay" id="birthday-alert-overlay" onclick="if(event.target===this)closeBirthdayAlert()">
+  <canvas id="birthday-confetti-canvas" class="birthday-confetti-canvas"></canvas>
+  <div class="birthday-alert" id="birthday-alert-box">
+    <button class="birthday-close" type="button" onclick="closeBirthdayAlert()" aria-label="Đóng">×</button>
+    <div class="birthday-alert-icon">🎂</div>
+    <div class="birthday-kicker">✨ BAN QUẢN TRỊ LOW THÔNG BÁO ✨</div>
+    <h3 id="birthday-alert-title">CHÚC MỪNG SINH NHẬT</h3>
+    <p class="birthday-alert-sub">Hôm nay là ngày đặc biệt của thành viên trong Gia Đình!</p>
+    <div class="birthday-celebrants-list" id="birthday-celebrants-list"></div>
+    <div class="birthday-wishes-quote">
+      "Chúc anh em thêm tuổi mới tràn đầy nhiệt huyết, bản lĩnh và luôn cùng sát cánh bên anh em Gia Đình LOSE OR WIN!"
+    </div>
+    <div class="modal-actions" style="justify-content:center; margin-top:18px;">
+      <button type="button" class="btn btn-primary birthday-btn" onclick="closeBirthdayAlert()">🎉 Đã Nhận Tin & Chúc Mừng</button>
+    </div>
+  </div>
+</div>
+<div class="birthday-alert-overlay membership-approved-overlay" id="membership-approved-overlay" onclick="if(event.target===this)closeMembershipApprovedAlert()">
+  <canvas id="membership-approved-confetti-canvas" class="birthday-confetti-canvas"></canvas>
+  <div class="birthday-alert membership-approved-alert" id="membership-approved-box">
+    <button class="birthday-close" type="button" onclick="closeMembershipApprovedAlert()" aria-label="Đóng">×</button>
+    <div class="birthday-alert-icon membership-approved-icon">🏆</div>
+    <div class="birthday-kicker" id="membership-approved-kicker">✨ BAN QUẢN TRỊ LOW CHÚC MỪNG ✨</div>
+    <h3 id="membership-approved-title">CHÚC MỪNG THÀNH VIÊN</h3>
+    <p class="birthday-alert-sub" id="membership-approved-sub">Hồ sơ của bạn đã được Chủ Gia Đình xét duyệt thành công.</p>
+    <div class="birthday-celebrants-list">
+      <div class="birthday-card membership-approved-card">
+        <div class="birthday-card-avatar">LOW</div>
+        <div class="birthday-card-info">
+          <div class="birthday-card-name" id="membership-approved-name">Chào mừng bạn đến với LOW</div>
+          <div class="birthday-card-role" id="membership-approved-role">⭐ Thành viên chính thức của Gia Đình</div>
+        </div>
+      </div>
+    </div>
+    <div class="birthday-wishes-quote" id="membership-approved-quote">Từ hôm nay, bạn chính thức đồng hành cùng anh em trong Gia Đình LOSE OR WIN!</div>
+    <div class="modal-actions" style="justify-content:center; margin-top:18px;">
+      <button type="button" class="btn btn-primary birthday-btn" id="membership-approved-button" onclick="closeMembershipApprovedAlert()">🎉 Vào Danh Sách Thành Viên</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="violation-overlay">
+  <div class="modal">
+    <h3>Chọn Lý Do</h3>
+    <p class="sub" id="violation-emp-name" style="margin:-8px 0 4px; color:var(--text-dim); font-size:13px;"></p>
+    <div class="violation-reasons" id="violation-reasons"></div>
+    <div class="field">
+      <label>Ghi Chú (Không Bắt Buộc)</label>
+      <input type="text" id="violation-note" placeholder="VD: Có xin phép trước qua nhóm chat">
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeViolationModal()">Huỷ</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="confirm-overlay">
+  <div class="modal" style="max-width:380px;">
+    <h3>Xác Nhận</h3>
+    <p id="confirm-message" style="color:var(--text-dim); font-size:14px; line-height:1.6; margin:0 0 4px;"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeConfirmModal()">Huỷ</button>
+      <button type="button" class="btn btn-primary" onclick="runConfirmedAction()">Xác Nhận</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="email-change-overlay" onclick="if(event.target===this)closeEmailChangeModal()">
+  <div class="modal">
+    <h3>Đổi Email Tài Khoản</h3>
+    <p id="email-change-current" style="color:var(--text-dim); font-size:13px; margin:-8px 0 16px;"></p>
+    <form onsubmit="submitEmailChange(event)">
+      <div class="field">
+        <label>Mật Khẩu Hiện Tại</label>
+        <input type="password" id="email-change-password" autocomplete="current-password" required>
+      </div>
+      <div class="field">
+        <label>Email Mới</label>
+        <input type="email" id="email-change-new" autocomplete="email" required>
+      </div>
+      <p id="email-change-error" class="auth-error" style="margin:0 0 4px;"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeEmailChangeModal()">Hủy</button>
+        <button type="submit" class="btn btn-primary">Lưu Email Mới</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="profile-overlay" id="profile-overlay" onclick="if(event.target===this)closeProfileModal()">
+  <div class="profile-modal">
+    <div class="profile-header">
+      <div>
+        <h3 id="profile-name">BM</h3>
+        <small id="profile-role">Thành Viên</small>
+      </div>
+      <button class="profile-close" type="button" onclick="closeProfileModal()" aria-label="Đóng hồ sơ">×</button>
+    </div>
+    <form class="profile-form" onsubmit="saveProfileChanges(event)">
+      <div class="field full">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="profile-username" readonly>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="profile-email" autocomplete="email">
+      </div>
+      <div class="field full">
+        <label>Mật khẩu hiện tại</label>
+        <div class="password-wrap">
+          <input type="password" id="profile-current-password" autocomplete="current-password" placeholder="Nhập mật khẩu hiện tại để xác nhận">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('profile-current-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Mật khẩu mới</label>
+        <div class="password-wrap">
+          <input type="password" id="profile-new-password" autocomplete="new-password" placeholder="Để trống nếu không muốn đổi mật khẩu">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('profile-new-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Nhập lại mật khẩu mới</label>
+        <div class="password-wrap">
+          <input type="password" id="profile-confirm-password" autocomplete="new-password" placeholder="Nhập lại mật khẩu mới nếu có thay đổi">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('profile-confirm-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+      </div>
+      <div class="profile-actions full">
+        <button type="button" class="btn btn-ghost" onclick="handleLogout()">Đăng Xuất</button>
+        <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/app.js?v=2.3.0"></script>
+
+<div class="overlay" id="modal-overlay">
+  <div class="modal">
+    <h3 id="modal-title">Thêm Thành Viên</h3>
+    <form id="emp-form" autocomplete="on" onsubmit="submitForm(event)">
+      <div class="field">
+        <label>Họ Tên</label>
+        <input type="text" id="f-name" name="name" list="member-name-history" autocomplete="name" required>
+        <datalist id="member-name-history"></datalist>
+      </div>
+      <div class="field">
+        <label>Quê Quán</label>
+        <input type="text" id="f-hometown" name="address-level2" list="province-list" placeholder="Nhập hoặc chọn tỉnh/thành" autocomplete="address-level2">
+        <datalist id="province-list">
+          <option value="Hà Nội">
+          <option value="TP. Hồ Chí Minh">
+          <option value="Hải Phòng">
+          <option value="Đà Nẵng">
+          <option value="Cần Thơ">
+          <option value="An Giang">
+          <option value="Bà Rịa – Vũng Tàu">
+          <option value="Bạc Liêu">
+          <option value="Bắc Giang">
+          <option value="Bắc Kạn">
+          <option value="Bắc Ninh">
+          <option value="Bến Tre">
+          <option value="Bình Định">
+          <option value="Bình Dương">
+          <option value="Bình Phước">
+          <option value="Bình Thuận">
+          <option value="Cà Mau">
+          <option value="Cao Bằng">
+          <option value="Đắk Lắk">
+          <option value="Đắk Nông">
+          <option value="Điện Biên">
+          <option value="Đồng Nai">
+          <option value="Đồng Tháp">
+          <option value="Gia Lai">
+          <option value="Hà Giang">
+          <option value="Hà Nam">
+          <option value="Hà Tĩnh">
+          <option value="Hải Dương">
+          <option value="Hậu Giang">
+          <option value="Hòa Bình">
+          <option value="Hưng Yên">
+          <option value="Khánh Hòa">
+          <option value="Kiên Giang">
+          <option value="Kon Tum">
+          <option value="Lai Châu">
+          <option value="Lâm Đồng">
+          <option value="Lạng Sơn">
+          <option value="Lào Cai">
+          <option value="Long An">
+          <option value="Nam Định">
+          <option value="Nghệ An">
+          <option value="Ninh Bình">
+          <option value="Ninh Thuận">
+          <option value="Phú Thọ">
+          <option value="Phú Yên">
+          <option value="Quảng Bình">
+          <option value="Quảng Nam">
+          <option value="Quảng Ngãi">
+          <option value="Quảng Ninh">
+          <option value="Quảng Trị">
+          <option value="Sóc Trăng">
+          <option value="Sơn La">
+          <option value="Tây Ninh">
+          <option value="Thái Bình">
+          <option value="Thái Nguyên">
+          <option value="Thanh Hóa">
+          <option value="Thừa Thiên Huế">
+          <option value="Tiền Giang">
+          <option value="Trà Vinh">
+          <option value="Tuyên Quang">
+          <option value="Vĩnh Long">
+          <option value="Vĩnh Phúc">
+          <option value="Yên Bái">
+        </datalist>
+      </div>
+      <div class="field">
+        <label>Ngày Sinh</label>
+        <input type="date" id="f-birthdate" name="bday" list="member-birthdate-history" autocomplete="bday" min="1900-01-01">
+        <datalist id="member-birthdate-history"></datalist>
+      </div>
+      <div class="field">
+        <label>Số Điện Thoại</label>
+        <input type="tel" id="f-phone" name="tel" list="member-phone-history" autocomplete="tel" inputmode="tel" required>
+        <datalist id="member-phone-history"></datalist>
+      </div>
+      <div class="field">
+        <label>Chức Vụ</label>
+        <select id="f-position" name="organization-title" autocomplete="organization-title"></select>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Tên Ingame</label>
+          <input type="text" id="f-department" name="nickname" list="member-department-history" autocomplete="nickname" placeholder="Nhập tên ingame">
+          <datalist id="member-department-history"></datalist>
+        </div>
+        <div class="field" id="status-field">
+          <label>Trạng Thái</label>
+          <select id="f-status">
+            <option value="active">Đang Hoạt Động</option>
+            <option value="inactive">Đang Off</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Ngày Vào LOW</label>
+        <input type="date" id="f-joindate">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Huỷ</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/init.js?v=2.3.0"></script>
+</body>
+</html>
