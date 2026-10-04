@@ -118,10 +118,31 @@ async function migrateIndexes(){
 }
 window.migrateIndexes = migrateIndexes;
 
-(async function init(){
+function createLogoRain(){
+  const rain = document.querySelector('.logo-rain');
+  if (!rain) return;
+
+  rain.innerHTML = '';
+  const total = 18;
+  for (let i = 0; i < total; i++) {
+    const img = document.createElement('img');
+    img.src = i % 2 === 0 ? 'assets/logo.png' : 'assets/logo_gang.png';
+    img.className = 'falling-logo';
+    img.style.left = `${Math.random() * 100}%`;
+    img.style.width = `${18 + Math.random() * 26}px`;
+    img.style.animationDuration = `${4 + Math.random() * 5}s`;
+    img.style.animationDelay = `${Math.random() * 5}s`;
+    rain.appendChild(img);
+  }
+}
+
+async function init(){
   render();
   if(handlePasswordResetReturn()) return;
   if(handleEmailVerificationReturn()) return;
   document.getElementById('landing-overlay').style.display = 'flex';
   startLandingCursorEffect();
-})();
+  createLogoRain();
+}
+
+init();

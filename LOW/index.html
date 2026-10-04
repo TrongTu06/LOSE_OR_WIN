@@ -26,7 +26,7 @@
     <div class="landing-3d-scene" aria-hidden="true">
       <div class="logo-cube">
         <div class="cube-face cube-front"><img src="assets/logo.png" alt="LOW logo"></div>
-        <div class="cube-face cube-back"></div>
+        <div class="cube-face cube-back"><img src="assets/logo_gang.png" alt="LOW gang logo back"></div>
         <div class="cube-face cube-left"></div>
         <div class="cube-face cube-right"></div>
         <div class="cube-face cube-top"></div>
@@ -42,7 +42,7 @@
         <div class="copy-pill"><span class="copy-dot"></span> ĐỒNG ĐỘI</div>
         <div class="copy-pill"><span class="copy-dot"></span> DANH DỰ</div>
       </div>
-      <p><b>LOSE OR WIN</b> là nơi kết nối anh em trong gia đình, quản lý thành viên, ghi nhận cống hiến và lưu giữ những dấu mốc của LOW bằng tinh thần kỷ luật, danh dự và đồng đội.</p>
+      <p><b>LOSE OR WIN</b> không chỉ là một cái tên, mà là ngôi nhà chung ghi dấu hành trình dài mà anh em đã kề vai sát cánh. Thắng hay bại không quan trọng, điều quý giá nhất là những kỷ niệm đã cùng nhau đi qua, bằng tình đồng đội bền chặt và tinh thần kỷ luật sắt đá.</p>
     </div>
     <button class="landing-enter" type="button" onclick="enterPortal()">LOW</button>
     <section class="landing-memories" aria-label="Kỷ niệm Đà Lạt">
@@ -68,66 +68,71 @@
 </div>
 <div class="auth-overlay hide" id="auth-overlay">
   <div class="auth-box">
-    <div class="auth-title">LOSE OR WIN</div>
-    <div class="auth-sub">Đăng nhập để quản lý dữ liệu của Gia Đình</div>
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Đăng Nhập</div>
-      <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Đăng Ký</div>
+    <div class="auth-visual">
+      <img class="auth-logo" src="assets/logo_gang.png" alt="LOW logo" decoding="async">
+      <div class="auth-brand">LOSE OR WIN</div>
     </div>
 
-    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
-      <div class="field">
-        <label>Tên đăng nhập hoặc Email</label>
-        <input type="text" id="login-username" autocomplete="username" placeholder="Tên đăng nhập hoặc email" data-lpignore="true" data-form-type="other" required>
+    <div class="auth-panel">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Đăng Nhập</div>
+        <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Đăng Ký</div>
       </div>
-      <div class="field">
-        <label>Mật khẩu</label>
-        <div class="password-wrap">
-          <input type="password" id="login-password" autocomplete="current-password" required>
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Đăng Nhập</button>
-      <button type="button" class="auth-link" onclick="showForgotPassword()">Quên mật khẩu?</button>
-    </form>
 
-    <form class="auth-form" id="form-forgot" onsubmit="handleForgotPassword(event)">
-      <div class="field">
-        <label>Email đã đăng ký</label>
-        <input type="email" id="forgot-email" autocomplete="email" required>
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Gửi Email Khôi Phục</button>
-      <button type="button" class="auth-link" onclick="switchAuthTab('login')">Quay lại Đăng Nhập</button>
-    </form>
-
-    <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
-      <div class="field">
-        <label>Tên đăng nhập</label>
-        <input type="text" id="reg-username" autocomplete="off" data-lpignore="true" data-form-type="other" maxlength="40" title="Không chứa @ . $ # [ ] /" required>
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="reg-email" autocomplete="email" required>
-      </div>
-      <div class="field">
-        <label>Mật khẩu</label>
-        <div class="password-wrap">
-          <input type="password" id="reg-password" autocomplete="new-password" required>
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+      <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+        <div class="field">
+          <label>Tên đăng nhập hoặc Email</label>
+          <input type="text" id="login-username" autocomplete="username" placeholder="Tên đăng nhập hoặc email" data-lpignore="true" data-form-type="other" required>
         </div>
-      </div>
-      <div class="field">
-        <label>Nhập lại mật khẩu</label>
-        <div class="password-wrap">
-          <input type="password" id="reg-password2" autocomplete="new-password" required>
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password2', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+        <div class="field">
+          <label>Mật khẩu</label>
+          <div class="password-wrap">
+            <input type="password" id="login-password" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+          </div>
         </div>
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Đăng Ký</button>
-      <div class="auth-register-notice" id="auth-register-notice" role="status" aria-live="polite"></div>
-    </form>
+        <button type="submit" class="btn btn-primary auth-submit">Đăng Nhập</button>
+        <button type="button" class="auth-link" onclick="showForgotPassword()">Quên mật khẩu?</button>
+      </form>
 
-    <div class="auth-error" id="auth-error"></div>
+      <form class="auth-form" id="form-forgot" onsubmit="handleForgotPassword(event)">
+        <div class="field">
+          <label>Email đã đăng ký</label>
+          <input type="email" id="forgot-email" autocomplete="email" required>
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit">Gửi Email Khôi Phục</button>
+        <button type="button" class="auth-link" onclick="switchAuthTab('login')">Quay lại Đăng Nhập</button>
+      </form>
+
+      <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
+        <div class="field">
+          <label>Tên đăng nhập</label>
+          <input type="text" id="reg-username" autocomplete="off" data-lpignore="true" data-form-type="other" maxlength="40" title="Không chứa @ . $ # [ ] /" required>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="reg-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label>Mật khẩu</label>
+          <div class="password-wrap">
+            <input type="password" id="reg-password" autocomplete="new-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Nhập lại mật khẩu</label>
+          <div class="password-wrap">
+            <input type="password" id="reg-password2" autocomplete="new-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password2', this)" title="Hiện/Ẩn mật khẩu">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit">Đăng Ký</button>
+        <div class="auth-register-notice" id="auth-register-notice" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="auth-error" id="auth-error"></div>
+    </div>
   </div>
 </div>
 
