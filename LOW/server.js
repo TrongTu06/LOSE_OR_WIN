@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 3000;
+const ROOT_DIR = __dirname;
+const INDEX_PATH = path.join(ROOT_DIR, 'index.html');
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -15,43 +18,55 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
 };
 
-const server = http.createServer((req, res) => {
-  let reqPath = decodeURI(req.url.split('?')[0]);
-  if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
+function sendResponse(res, status, contentType, body) {
+  res.writeHead(status, { 'Content-Type': contentType });
+  res.end(body);
+}
 
-  const filePath = path.join(__dirname, reqPath);
-  const ext = path.extname(filePath).toLowerCase();
-  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+function sendNotFound(res) {
+  sendResponse(res, 404, 'text/plain; charset=utf-8', '404 Not Found');
+}
 
-  fs.readFile(filePath, (err, content) => {
+function serveIndexFallback(res) {
+  fs.readFile(INDEX_PATH, (err, html) => {
     if (err) {
-      if (err.code === 'ENOENT') {
-        if (!ext || ext === '.html') {
-          fs.readFile(path.join(__dirname, 'index.html'), (e, html) => {
-            if (e) {
-              res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-              res.end('404 Not Found');
-            } else {
-              res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-              res.end(html);
-            }
-          });
-          return;
-        }
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('404 Not Found');
-      } else {
-        res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('500 Server Error');
-      }
-    } else {
-      res.writeHead(200, { 'Content-Type': contentType });
-      res.end(content);
+      sendNotFound(res);
+      return;
     }
+    sendResponse(res, 200, MIME_TYPES['.html'], html);
   });
-});
+}
+
+function handleRequest(req, res) {
+  const requestPath = decodeURI(req.url.split('?')[0]) || '/';
+  const resolvedPath = requestPath === '/'
+    ? INDEX_PATH
+    : path.join(ROOT_DIR, requestPath);
+  const extension = path.extname(resolvedPath).toLowerCase();
+
+  fs.readFile(resolvedPath, (err, content) => {
+    if (err) {
+      if (err.code !== 'ENOENT') {
+        sendResponse(res, 500, 'text/plain; charset=utf-8', '500 Server Error');
+        return;
+      }
+
+      if (!extension || extension === '.html') {
+        serveIndexFallback(res);
+        return;
+      }
+
+      sendNotFound(res);
+      return;
+    }
+
+    const contentType = MIME_TYPES[extension] || 'application/octet-stream';
+    sendResponse(res, 200, contentType, content);
+  });
+}
+
+const server = http.createServer(handleRequest);
 
 server.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
-

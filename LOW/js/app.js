@@ -259,6 +259,7 @@ let appHistoryInitialized = false;
 let sharedSyncTimer = null;
 let sharedSyncBusy = false;
 let sharedDataSnapshot = '';
+const sidebarLogoSpinStartedAt = performance.now();
 let birthdayAlertDismissed = false;
 let checkinSession = null;
 let checkinTimer = null;
@@ -2568,11 +2569,16 @@ function render(){
   }
   if(!canAccessView(currentView)) currentView = isOwner() || hasApprovedMembership() ? 'list' : getMemberFallbackView();
   const app = document.getElementById('app');
+  const sidebarLogoSpinDuration = 8000;
+  const sidebarLogoSpinDelay = -((performance.now() - sidebarLogoSpinStartedAt) % sidebarLogoSpinDuration);
   app.classList.add('dashboard-3d');
   app.innerHTML = `
     <nav class="sidebar">
       <h1>LOSE OR WIN</h1>
-      <img src="assets/logo.png" decoding="async" alt="LOSE OR WIN Logo" class="sidebar-logo">
+      <div class="sidebar-logo" role="img" aria-label="LOSE OR WIN Logo" style="animation-delay:${sidebarLogoSpinDelay}ms">
+        <img src="assets/logo.png" decoding="async" alt="" aria-hidden="true" class="sidebar-logo-face sidebar-logo-front">
+        <img src="assets/logo.png" decoding="async" alt="" aria-hidden="true" class="sidebar-logo-face sidebar-logo-back">
+      </div>
       ${canAccessView('list') ? `<button class="nav-btn ${currentView==='list'?'active':''}" onclick="setView('list')">Danh Sách Thành Viên</button>` : ''}
       ${!isAdmin() && hasPendingRegistration() ? `<button class="nav-btn ${currentView==='member-pending'?'active':''}" onclick="setView('member-pending')">Đợi Xét Duyệt<span class="notification-badge">!</span></button>` : ''}
       ${canAccessView('attendance') ? `<button class="nav-btn ${currentView==='attendance'?'active':''}" onclick="setView('attendance')">Điểm Danh</button>` : ''}
